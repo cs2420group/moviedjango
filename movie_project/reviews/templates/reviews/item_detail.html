@@ -1,0 +1,17 @@
+{% extends 'reviews/base.html' %}
+{% block content %}
+    <h2>{{ item.title }}</h2>
+    <p>{{ item.description }}</p>
+    <p><strong>Release Date:</strong> {{ item.release_date }}</p>
+    <hr>
+    <h3>Reviews:</h3>
+    {% for review in item.reviews.all %}
+        <div style="border-bottom: 1px solid #ccc; margin-bottom: 10px;">
+            <p><strong>{{ review.author.username }}</strong> — {{ review.rating }}/10</p>
+            <p>{{ review.text }}</p>
+        </div>
+    {% empty %}
+        <p>No reviews yet.</p>
+    {% endfor %}
+    <a href="{% url 'home' %}">Back to list</a>
+{% endblock %}

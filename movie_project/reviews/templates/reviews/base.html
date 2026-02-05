@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie & Book Reviews</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>🎬 My Review Website</h1>
+        <nav>
+            <a href="/">Home</a> | <a href="/admin/">Admin Panel</a> | <a href="/api/test/">API</a>
+        </nav>
+    </header>
+    <hr>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
