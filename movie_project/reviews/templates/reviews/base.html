@@ -1,24 +1,66 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <title>Movie Reviews</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Review Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand { font-weight: bold; font-size: 1.5rem; }
+        .card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>🎬 Movie Review Website</h1>
-        <nav>
-            <a href="/">Home</a> | 
-            <a href="/about/">About</a> | 
-            <a href="/admin/">Admin</a> | 
-            <a href="/api/items/">API</a>
-        </nav>
-    </header>
-    <hr>
-    <main>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow">
+        <div class="container">
+            <a class="navbar-brand" href="/">🎬 ReviewHub</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Главная</a>
+                <a class="nav-link" href="/about/">О проекте</a>
+                <a class="nav-link text-warning" href="/api/items/">Open API</a>
+                <a class="nav-link btn btn-outline-light btn-sm ms-lg-3" href="/admin/">Админка</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
         {% block content %}{% endblock %}
-    </main>
+
+        <div class="mt-5 p-4 rounded bg-dark text-success shadow">
+            <div class="d-flex justify-content-between">
+                <h6 class="text-warning">Terminal: API Test Room</h6>
+                <button class="btn btn-sm btn-outline-warning" onclick="testAPI()">Run Fetch</button>
+            </div>
+            <pre id="api-log" class="mt-2 mb-0 small" style="max-height: 100px; overflow: auto;">// Нажмите Run для проверки API...</pre>
+        </div>
+    </div>
+
+    <footer class="text-center mt-5 py-4 border-top">
+        <p class="text-muted">© 2026 Movie Review Pro | <span class="badge bg-secondary">Django + DRF</span></p>
+    </footer>
+
+    <div class="position-fixed bottom-0 start-0 m-3">
+        <button class="btn btn-dark rounded-circle border" id="themeBtn">🌓</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Тёмная тема
+        document.getElementById('themeBtn').addEventListener('click', () => {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', theme);
+        });
+
+        // API Консоль
+        function testAPI() {
+            fetch('/api/items/')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('api-log').textContent = JSON.stringify(data.slice(0, 1), null, 2);
+                });
+        }
+    </script>
 </body>
 </html>

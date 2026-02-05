@@ -1,27 +1,33 @@
 {% extends 'reviews/base.html' %}
 
 {% block content %}
-    <h2>All Movies & Books</h2>
-    <div class="item-container">
-        {% for item in items %}
-            <div class="item-card">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.description }}</p>
-                <p><strong>Release Date:</strong> {{ item.release_date }}</p>
-                
-                <h4>Reviews:</h4>
-                <ul>
-                    {% for review in item.reviews.all %} <li>
-                            <strong>{{ review.author.username }}</strong> rated it 
-                            <span style="color: gold;">★ {{ review.rating }}/10</span>
-                            <p>"{{ review.text }}"</p>
-                        </li>
-                    {% empty %}
-                        <li>No reviews yet.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <hr>
-        {% endfor %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="text-uppercase fw-bold">Все обзоры</h2>
+        <p class="text-muted mb-0">Всего в базе: <span class="badge bg-primary">{{ total_count }}</span></p>
     </div>
+    <form method="GET" action="/" class="d-flex w-50 shadow-sm">
+        <input type="text" name="search" class="form-control me-2" placeholder="Найти фильм..." value="{{ search_query|default:'' }}">
+        <button type="submit" class="btn btn-dark px-4">Поиск</button>
+    </form>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for item in items %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ item.title }}</h5>
+                <p class="card-text">{{ item.description|truncatechars:100 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-success">Год: {{ item.release_date|date:"Y" }}</span>
+                    <a href="{% url 'item_detail' item.pk %}" class="btn btn-sm btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info w-100 text-center">Фильмов пока нет.</div>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -7,9 +7,19 @@ from .serializers import ItemSerializer
 
 # --- HTML страницы для браузера ---
 
+
 def home(request):
-    items = Item.objects.all()
-    return render(request, 'reviews/item_list.html', {'items': items})
+    query = request.GET.get('search')
+    if query:
+        # Ищем фильмы, где в названии есть то, что ввел пользователь
+        items = Item.objects.filter(title__icontains=query)
+    else:
+        items = Item.objects.all()
+    
+    return render(request, 'reviews/item_list.html', {
+        'items': items,
+        'search_query': query # Передаем запрос обратно в шаблон
+    })
 
 def item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
