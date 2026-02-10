@@ -1,17 +1,61 @@
 {% extends 'reviews/base.html' %}
+
 {% block content %}
-    <h2>{{ item.title }}</h2>
-    <p>{{ item.description }}</p>
-    <p><strong>Release Date:</strong> {{ item.release_date }}</p>
-    <hr>
-    <h3>Reviews:</h3>
-    {% for review in item.reviews.all %}
-        <div style="border-bottom: 1px solid #ccc; margin-bottom: 10px;">
-            <p><strong>{{ review.author.username }}</strong> — {{ review.rating }}/10</p>
-            <p>{{ review.text }}</p>
+<div class="row mt-4">
+    <div class="col-md-4 mb-4">
+        {% if item.poster_url %}
+            <img src="{{ item.poster_url }}" class="img-fluid rounded shadow-lg" alt="{{ item.title }}">
+        {% else %}
+            <div class="bg-dark text-white d-flex align-items-center justify-content-center rounded shadow" style="height: 450px; font-size: 5rem;">🎬</div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-8">
+        <h1 class="display-5 fw-bold">{{ item.title }}</h1>
+        <p class="text-muted"><strong>Дата выхода:</strong> {{ item.release_date }}</p>
+        <hr>
+        <h4 class="fw-bold">Описание</h4>
+        <p class="lead">{{ item.description }}</p>
+
+        {% if item.video_url %}
+        <div class="mt-4">
+            <h4 class="fw-bold mb-3">Трейлер / Фильм</h4>
+            <div class="ratio ratio-16x9 shadow rounded overflow-hidden">
+                <iframe 
+                    src="{{ item.video_url }}" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+            </div>
         </div>
-    {% empty %}
-        <p>No reviews yet.</p>
-    {% endfor %}
-    <a href="{% url 'home' %}">Back to list</a>
+    {% endif %}
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm p-4">
+            <h3 class="fw-bold mb-4">💬 Отзывы зрителей:</h3>
+            
+            {% for review in item.reviews.all %}
+                <div class="pb-3 mb-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-1">👤 {{ review.author.username }}</h6>
+                        <span class="badge bg-warning text-dark">⭐ {{ review.rating }}/10</span>
+                    </div>
+                    <p class="text-muted mb-0 small">{{ review.text }}</p>
+                </div>
+            {% empty %}
+                <p class="text-muted italic">Отзывов пока нет. Будьте первым!</p>
+            {% endfor %}
+            
+            <div class="mt-4">
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">← Назад к списку</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

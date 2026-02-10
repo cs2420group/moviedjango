@@ -11,4 +11,5 @@ urlpatterns = [
     
     path('api/items/', views.item_api_list, name='api_list'),
     path('api/items/<int:pk>/', views.item_api_detail, name='api_detail'),
+    path('item/add/', views.item_create, name='item_create'),
 ]
